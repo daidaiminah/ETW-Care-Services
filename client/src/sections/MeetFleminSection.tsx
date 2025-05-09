@@ -1,15 +1,45 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FaPlay } from 'react-icons/fa';
-import { useState } from 'react';
+import { FaTimes } from 'react-icons/fa';
+import { useState, useRef, useEffect } from 'react';
+import OwnerImg from "../assets/images/multi-ethnic-business-team.jpg"
 
 const MeetFleminSection = () => {
+  const [showPopup, setShowPopup] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-
+  const videoRef = useRef<HTMLIFrameElement>(null);
+  
   const handlePlayVideo = () => {
-    setIsPlaying(true);
-    // In a real implementation, you would trigger the video player here
+    setShowPopup(true);
   };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    setIsPlaying(false);
+    // Reset video if needed
+    if (videoRef.current && videoRef.current.src) {
+      videoRef.current.src = videoRef.current.src;
+    }
+  };
+
+  const handleStartVideo = () => {
+    setIsPlaying(true);
+  };
+
+  // Close popup with escape key
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        handleClosePopup();
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+    
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
 
   return (
     <section className="py-20 bg-[#d7e5ea]">
@@ -23,15 +53,15 @@ const MeetFleminSection = () => {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-4xl font-bold text-gray-800 mb-6">
-              Meet the<br />Flemings
+              Meet the<br />Daimit
             </h2>
             <p className="text-gray-700 mb-8 leading-relaxed">
-              Ken and Mary Ellen started FirstLight Home Care of Charlotte based on the 
+              Nat and Mary Ellen Daimit started ETW Care Services of Rehab based on the 
               experience they had with their son Joe and their love of seniors.
             </p>
             <Link
               to="/contact"
-              className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-3 rounded-lg uppercase text-sm tracking-wider transition duration-300"
+              className="inline-block bg-primary hover:bg-primary/90 text-white font-medium px-6 py-3 rounded-lg uppercase text-sm tracking-wider transition duration-300"
             >
               FIND HOME CARE NEAR YOU
             </Link>
@@ -48,16 +78,16 @@ const MeetFleminSection = () => {
             <div className="rounded-lg overflow-hidden shadow-xl">
               <div className="relative">
                 <img 
-                  src="/src/assets/images/multi-ethnic-business-team.jpg" 
-                  alt="Ken and Mary Ellen Fleming - Owners of ETW Care Services" 
+                  src={OwnerImg} 
+                  alt="Ken and Mary Ellen Daimit - Owners of ETW Care Services" 
                   className="w-full h-auto"
                 />
                 
                 {/* Caption overlay */}
                 <div className="absolute bottom-0 left-0 right-0 bg-black/30 text-white p-4">
                   <p className="text-sm">
-                    Mary Ellen and Ken Fleming<br />
-                    Owners of FirstLight Home Care of Charlotte, N.C.
+                    Mary Ellen and Ken Daimit<br />
+                    Owners of ETW Care Services of Rehab
                   </p>
                 </div>
                 
@@ -72,19 +102,46 @@ const MeetFleminSection = () => {
                   </div>
                 </button>
                 
-                {/* Video overlay - would be displayed when isPlaying is true */}
-                {isPlaying && (
-                  <div className="absolute inset-0 bg-black">
-                    {/* In a real implementation, you would embed the actual video player here */}
-                    <iframe 
-                      width="100%" 
-                      height="100%" 
-                      src="about:blank" 
-                      title="Owners of ETW Care Services" 
-                      frameBorder="0" 
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                      allowFullScreen
-                    ></iframe>
+                {/* Video popup overlay */}
+                {showPopup && (
+                  <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+                    <div className="relative bg-white rounded-lg w-full max-w-3xl mx-auto">
+                      {/* Close button */}
+                      <button 
+                        onClick={handleClosePopup}
+                        className="absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors"
+                        aria-label="Close video"
+                      >
+                        <FaTimes size={24} />
+                      </button>
+                      
+                      {/* Video container */}
+                      <div className="aspect-video relative overflow-hidden">
+                        {!isPlaying ? (
+                          <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
+                            <button 
+                              onClick={handleStartVideo}
+                              className="bg-primary hover:bg-primary/90 text-white rounded-full w-16 h-16 flex items-center justify-center transition-all duration-300"
+                              aria-label="Play video"
+                            >
+                              <FaPlay className="ml-1" size={20} />
+                            </button>
+                          </div>
+                        ) : (
+                          <iframe 
+                            ref={videoRef}
+                            width="100%" 
+                            height="100%" 
+                            src="https://www.youtube-nocookie.com/embed/oK8eYmJUt7Y?si=5GzuXhZLdfUpEiL4" 
+                            title="YouTube video player" 
+                            frameBorder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            referrerPolicy="strict-origin-when-cross-origin" 
+                            allowFullScreen
+                          ></iframe>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

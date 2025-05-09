@@ -1,4 +1,8 @@
 import { motion } from 'framer-motion';
+import TestimonialImg1 from "../assets/images/close-up-smiley-women-hugging.jpg"
+import TestimonialImg2 from "../assets/images/mature-couple-posing-against-concrete-wall.jpg"
+import TestimonialImg3 from "../assets/images/portrait-congolese-woman.jpg"
+
 
 // Define testimonial data
 const testimonials = [
@@ -7,21 +11,21 @@ const testimonials = [
     quote: "The care provided by ETW for my mother has been exceptional. The caregivers are compassionate, reliable, and truly care about her wellbeing.",
     author: "Jennifer S.",
     relation: "Daughter of client",
-    image: "/src/assets/images/testimonial-1.jpg"
+    image: TestimonialImg1
   },
   {
     id: 2,
     quote: "After my surgery, I was worried about managing at home alone. ETW Care Services made the recovery period so much easier with their professional and attentive care.",
     author: "Robert M.",
     relation: "Personal care client",
-    image: "/src/assets/images/testimonial-2.jpg"
+    image: TestimonialImg2
   },
   {
     id: 3,
     quote: "Finding quality care for my father with dementia was challenging until we found ETW. Their specialized approach has made such a difference in his quality of life.",
     author: "Michael T.",
     relation: "Son of client",
-    image: "/src/assets/images/testimonial-3.jpg"
+    image: TestimonialImg3
   }
 ];
 

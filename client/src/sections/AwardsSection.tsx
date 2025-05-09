@@ -1,9 +1,26 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
+// Import all award images
+import award1 from '../assets/images/awards/award1.png';
+import award2 from '../assets/images/awards/award2.png';
+import award3 from '../assets/images/awards/award3.png';
+import award4 from '../assets/images/awards/award4.png';
+import award5 from '../assets/images/awards/award5.png';
+import award6 from '../assets/images/awards/award6.png';
+import award7 from '../assets/images/awards/award7.png';
+import award8 from '../assets/images/awards/award8.png';
+import award9 from '../assets/images/awards/award9.png';
+import award10 from '../assets/images/awards/award10.jpg';
+import award11 from '../assets/images/awards/award11.png';
+import award12 from '../assets/images/awards/award12.jpg';
+import award13 from '../assets/images/awards/award13.png';
+import award14 from '../assets/images/awards/award14.jpeg';
+import award15 from '../assets/images/awards/award15.jpeg';
+
 // List of locations from the AreasServedSection
 const locations = [
-  'Charlotte',
+  'Rehab',
   'Huntersville',
   'Pineville',
   'Matthews, NC',
@@ -13,6 +30,48 @@ const locations = [
 
 const AwardsSection = () => {
   const [currentLocationIndex, setCurrentLocationIndex] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  
+  // Array of all award images
+  const allAwards = [
+    { src: award1, alt: "Commerce Choice Award" },
+    { src: award2, alt: "Fast 50 Award" },
+    { src: award3, alt: "Veteran Owned Business" },
+    { src: award4, alt: "Equal Opportunity Employer" },
+    { src: award5, alt: "Care Quality Certification" },
+    { src: award6, alt: "Excellence in Care Award" },
+    { src: award7, alt: "Top Rated Service Award" },
+    { src: award8, alt: "Customer Satisfaction Award" },
+    { src: award9, alt: "Community Service Award" },
+    { src: award10, alt: "Best in Industry Award" },
+    { src: award11, alt: "Professional Care Certification" },
+    { src: award12, alt: "Healthcare Excellence Award" },
+    { src: award13, alt: "Quality Service Award" },
+    { src: award14, alt: "Best Care Provider Award" },
+    { src: award15, alt: "Outstanding Service Award" },
+  ];
+  
+  // Number of awards to display at once
+  const awardsPerPage = 5;
+  
+  // Calculate total number of pages
+  const totalPages = Math.ceil(allAwards.length / awardsPerPage);
+  
+  // Function to navigate to previous page
+  const prevPage = () => {
+    setCurrentPage((prev) => (prev === 0 ? totalPages - 1 : prev - 1));
+  };
+  
+  // Function to navigate to next page
+  const nextPage = () => {
+    setCurrentPage((prev) => (prev === totalPages - 1 ? 0 : prev + 1));
+  };
+  
+  // Get current awards to display
+  const getCurrentAwards = () => {
+    const startIndex = currentPage * awardsPerPage;
+    return allAwards.slice(startIndex, startIndex + awardsPerPage);
+  };
   
   // Change location every 30 seconds
   useEffect(() => {
@@ -37,32 +96,40 @@ const AwardsSection = () => {
           
           {/* Awards logos carousel */}
           <div className="relative overflow-hidden">
-            <button className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md z-10">
+            <button 
+              onClick={prevPage}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-100 transition-colors"
+              aria-label="Previous awards"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             
             <div className="flex justify-center items-center space-x-8 py-8">
-              {/* Award logos */}
-              <div className="w-28 h-20 flex items-center justify-center">
-                <img src="/src/assets/images/award-logo-1.png" alt="Commerce Choice Award" className="max-h-full" onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/120x80?text=Award+1' }} />
-              </div>
-              <div className="w-28 h-20 flex items-center justify-center">
-                <img src="/src/assets/images/award-logo-2.png" alt="Fast 50 Award" className="max-h-full" onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/120x80?text=Award+2' }} />
-              </div>
-              <div className="w-28 h-20 flex items-center justify-center">
-                <img src="/src/assets/images/award-logo-3.png" alt="Veteran Owned Business" className="max-h-full" onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/120x80?text=Award+3' }} />
-              </div>
-              <div className="w-28 h-20 flex items-center justify-center">
-                <img src="/src/assets/images/award-logo-4.png" alt="Equal Opportunity Employer" className="max-h-full" onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/120x80?text=Award+4' }} />
-              </div>
-              <div className="w-28 h-20 flex items-center justify-center">
-                <img src="/src/assets/images/award-logo-5.png" alt="Care Quality Certification" className="max-h-full" onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/120x80?text=Award+5' }} />
-              </div>
+              {/* Map through current page of awards */}
+              {getCurrentAwards().map((award, index) => (
+                <motion.div 
+                  key={`award-${currentPage}-${index}`}
+                  className="w-32 h-24 flex items-center justify-center"
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <img 
+                    src={award.src} 
+                    alt={award.alt} 
+                    className="max-h-full max-w-full object-contain" 
+                  />
+                </motion.div>
+              ))}
             </div>
             
-            <button className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md z-10">
+            <button 
+              onClick={nextPage}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-100 transition-colors"
+              aria-label="Next awards"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -76,7 +143,7 @@ const AwardsSection = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="bg-[#4B6C80] text-white py-10 px-6 rounded-lg text-center"
+          className="bg-primary text-white py-10 px-6 rounded-lg text-center"
         >
           <h2 className="text-3xl font-bold mb-0">Home Care You Can Trust in</h2>
           <motion.div

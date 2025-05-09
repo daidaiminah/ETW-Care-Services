@@ -1,2 +1,2 @@
 # ETW-Care-Services
-A care giving services
+ETW Care Services, is a care giving service site 

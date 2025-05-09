@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import OwnerImg from "../assets/images/multi-ethnic-business-team.jpg"
 
 const InfoSection = () => {
   return (
@@ -10,7 +11,7 @@ const InfoSection = () => {
           <div className="md:col-span-4 lg:col-span-3">
             <div className="rounded-lg overflow-hidden shadow-md">
               <img 
-                src="/src/assets/images/multi-ethnic-business-team.jpg" 
+                src={OwnerImg}
                 alt="Care services team" 
                 className="w-full h-auto"
               />

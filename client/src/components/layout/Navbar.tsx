@@ -36,9 +36,9 @@ const [megaMenuOpen, setMegaMenuOpen] = useState(false);
     <header className="bg-white shadow-sm">
       <div className="container mx-auto">
         <div className="bg-blue-50 w-full">
-          <div className="flex items-center justify-end space-x-3 h-12 px-8">
+          <div className="flex items-center justify-end space-x-3 h-12">
             <FaLocationDot className="text-primary"/>
-            <p className="text-gray-600">123 Main St, Anytown, USA</p>
+            <p className="text-gray-600 pr-8">123 Main St, Anytown, USA</p>
           </div>
         </div>
         <div className="flex items-center justify-between py-4 px-8">
