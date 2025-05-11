@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useState, useRef } from 'react';
+import HeroImage from '../assets/videos/5411347_Coll_wavebreak_People_3840x2160.mp4'
 
 const HeroSection = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -86,7 +87,7 @@ const HeroSection = () => {
                   controls={isPlaying}
                   preload="metadata"
                 >
-                  <source src="/src/assets/videos/5411347_Coll_wavebreak_People_3840x2160.mp4" type="video/mp4" />
+                  <source src={HeroImage} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
