@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import HeroImage from '../assets/videos/5411347_Coll_wavebreak_People_3840x2160.mp4'
 
 const HeroSection = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handlePlayVideo = () => {
@@ -17,6 +17,13 @@ const HeroSection = () => {
       setIsPlaying(!isPlaying);
     }
   };
+
+  // Only set up the initial autoplay once
+  useEffect(() => {
+    // We don't need to do anything programmatically after initial setup
+    // The video will autoplay due to the autoPlay attribute
+    // and loop due to the loop attribute
+  }, []);
 
   return (
     <section className="bg-gradient-to-r from-primary to-accent text-white py-20">
@@ -85,7 +92,11 @@ const HeroSection = () => {
                   className="w-full h-auto rounded-lg" 
                   onClick={handlePlayVideo}
                   controls={isPlaying}
-                  preload="metadata"
+                  preload="auto"
+                  autoPlay
+                  muted
+                  playsInline
+                  loop
                 >
                   <source src={HeroImage} type="video/mp4" />
                   Your browser does not support the video tag.

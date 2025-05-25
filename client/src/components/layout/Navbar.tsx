@@ -7,10 +7,11 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [whyUsDropdownOpen, setWhyUsDropdownOpen] = useState(false);
+  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  
   const servicesRef = useRef<HTMLDivElement>(null);
   const whyUsRef = useRef<HTMLDivElement>(null);
-  // Add a state to control mega menu visibility
-const [megaMenuOpen, setMegaMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -27,20 +28,35 @@ const [megaMenuOpen, setMegaMenuOpen] = useState(false);
 
   useEffect(() => {
     document.addEventListener('mousedown', closeDropdowns);
+
+    // Handle scroll event to fix navbar
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
     return () => {
       document.removeEventListener('mousedown', closeDropdowns);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className={`${scrolled ? 'fixed top-0 left-0 right-0 z-50 shadow-md' : 'relative shadow-sm'} bg-white w-full transition-all duration-300`}>
       <div className="container mx-auto">
-        <div className="bg-blue-50 w-full">
-          <div className="flex items-center justify-end space-x-3 h-12">
-            <FaLocationDot className="text-primary"/>
-            <p className="text-gray-600 pr-8">123 Main St, Anytown, USA</p>
+        {!scrolled && (
+          <div className="bg-blue-50 w-full">
+            <div className="flex items-center justify-end space-x-3 h-12">
+              <FaLocationDot className="text-primary"/>
+              <p className="text-gray-600 pr-8">123 Main St, Anytown, USA</p>
+            </div>
           </div>
-        </div>
+        )}
         <div className="flex items-center justify-between py-4 px-8">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
@@ -164,7 +180,7 @@ const [megaMenuOpen, setMegaMenuOpen] = useState(false);
          {/* When mega menu is opened */}
         {megaMenuOpen && (
           <div className="absolute left-0 right-0 bg-white shadow-lg z-50 border-t border-gray-200">
-            <div className="container mx-auto py-8 px-4">
+            <div className="container mx-auto py-8 px-12">
               <div className="grid grid-cols-3 gap-8">
                 {/* Care Services Column */}
                 <div>
@@ -230,13 +246,13 @@ const [megaMenuOpen, setMegaMenuOpen] = useState(false);
               <div className="flex justify-center space-x-6 mt-8">
                 <Link 
                   to="/pricing" 
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-3 rounded uppercase tracking-wide transition duration-300"
+                  className="bg-primary hover:bg-primary/80 text-white font-medium px-6 py-3 rounded uppercase tracking-wide transition duration-300"
                 >
                   REQUEST PRICING
                 </Link>
                 <Link 
                   to="/careers" 
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-3 rounded uppercase tracking-wide transition duration-300"
+                  className="bg-primary hover:bg-primary/80 text-white font-medium px-6 py-3 rounded uppercase tracking-wide transition duration-300"
                 >
                   CAREGIVER CAREERS
                 </Link>

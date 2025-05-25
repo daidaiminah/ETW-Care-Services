@@ -1,11 +1,42 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FaPlay } from 'react-icons/fa';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import { useState, useRef, useEffect } from 'react';
 import OwnerImg from "../assets/images/multi-ethnic-business-team.jpg"
+import seniorWoman from "../assets/images/senior-women.jpg"
+import careGiver1 from "../assets/images/male-social-worker-taking-care-old-woman.jpg"
+
 
 const MeetFleminSection = () => {
+  const slides = [
+    {
+      image: OwnerImg,
+      title: "Meet the<br /> Daimit",
+      description: "Nat and Mary Ellen Daimit started ETW Care Services of Rehab based on the experience they had with their son Joe and their love of seniors.",
+      video: "https://www.youtube-nocookie.com/embed/oK8eYmJUt7Y?si=5GzuXhZLdfUpEiL4",
+      captionLine1: "Mary Ellen and Ken Daimit",
+      captionLine2: "Owners of ETW Care Services of Rehab"
+    },
+    {
+      image: seniorWoman,
+      title: "Meet Our<br /> Caregivers",
+      description: "Our caregivers are compassionate, experienced, and dedicated to providing the best care possible for your loved ones.",
+      video: "https://www.youtube-nocookie.com/embed/oK8eYmJUt7Y?si=5GzuXhZLdfUpEiL4",
+      captionLine1: "ETW Care Services Team",
+      captionLine2: "Providing compassionate care for seniors"
+    },
+    {
+      image: careGiver1,
+      title: "Meet Our<br /> Caregivers",
+      description: "Meet John, one of our best caregivers. John has been with ETW Care Services of Rehab for over 10 years and has a passion for helping seniors live their best lives.",
+      video: "https://www.youtube-nocookie.com/embed/oK8eYmJUt7Y?si=5GzuXhZLdfUpEiL4",
+      captionLine1: "John Smith",
+      captionLine2: "Senior Caregiver at ETW Care Services"
+    },
+  ];
+
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLIFrameElement>(null);
@@ -52,12 +83,9 @@ const MeetFleminSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl font-bold text-gray-800 mb-6">
-              Meet the<br />Daimit
-            </h2>
+            <h2 className="text-4xl font-bold text-gray-800 mb-6" dangerouslySetInnerHTML={{ __html: slides[currentSlide].title }} />
             <p className="text-gray-700 mb-8 leading-relaxed">
-              Nat and Mary Ellen Daimit started ETW Care Services of Rehab based on the 
-              experience they had with their son Joe and their love of seniors.
+              {slides[currentSlide].description}
             </p>
             <Link
               to="/contact"
@@ -78,16 +106,16 @@ const MeetFleminSection = () => {
             <div className="rounded-lg overflow-hidden shadow-xl">
               <div className="relative">
                 <img 
-                  src={OwnerImg} 
-                  alt="Ken and Mary Ellen Daimit - Owners of ETW Care Services" 
+                  src={slides[currentSlide].image} 
+                  alt={`Slide ${currentSlide + 1} - ETW Care Services`} 
                   className="w-full h-auto"
                 />
                 
                 {/* Caption overlay */}
                 <div className="absolute bottom-0 left-0 right-0 bg-black/30 text-white p-4">
                   <p className="text-sm">
-                    Mary Ellen and Ken Daimit<br />
-                    Owners of ETW Care Services of Rehab
+                    {slides[currentSlide].captionLine1}<br />
+                    {slides[currentSlide].captionLine2}
                   </p>
                 </div>
                 
@@ -132,7 +160,7 @@ const MeetFleminSection = () => {
                             ref={videoRef}
                             width="100%" 
                             height="100%" 
-                            src="https://www.youtube-nocookie.com/embed/oK8eYmJUt7Y?si=5GzuXhZLdfUpEiL4" 
+                            src={`${slides[currentSlide].video}${isPlaying ? '&autoplay=1' : ''}`}
                             title="YouTube video player" 
                             frameBorder="0" 
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -149,11 +177,29 @@ const MeetFleminSection = () => {
             
             {/* Navigation dots */}
             <div className="flex justify-center mt-6 space-x-2">
-              <button className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                <span className="sr-only">Slide 1</span>
+              <button 
+                onClick={() => setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1))}
+                className="w-8 h-8 rounded-full bg-white hover:bg-gray-100 text-primary flex items-center justify-center transition-colors duration-300"
+                aria-label="Previous slide"
+              >
+                <FaArrowLeft />
               </button>
-              <button className="w-8 h-8 rounded-full border border-primary flex items-center justify-center">
-                <span className="sr-only">Slide 2</span>
+              <div className="flex space-x-2">
+                {slides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-2 h-2 rounded-full transition-colors duration-300 ${index === currentSlide ? 'bg-primary' : 'bg-gray-300 hover:bg-primary/50'}`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+              <button 
+                onClick={() => setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1))}
+                className="w-8 h-8 rounded-full bg-white hover:bg-gray-100 text-primary flex items-center justify-center transition-colors duration-300"
+                aria-label="Next slide"
+              >
+                <FaArrowRight />
               </button>
             </div>
           </motion.div>
