@@ -1,19 +1,45 @@
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
+import { useLocation } from 'react-router-dom';
+import api from '../../utils/api';
 
 const ContactForm = () => {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     message: '',
+    subject: 'General Inquiry',
   });
+  
+  // Check for URL parameters to pre-populate the subject field
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const subjectParam = searchParams.get('subject');
+    
+    if (subjectParam) {
+      setFormData(prev => ({ ...prev, subject: subjectParam }));
+    }
+  }, [location.search]);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  
+  // Reset message status after 5 seconds
+  useEffect(() => {
+    if (submitStatus === 'success' || submitStatus === 'error') {
+      const timer = setTimeout(() => {
+        setSubmitStatus('idle');
+      }, 5000); // 5 seconds
+      
+      // Clear timeout if component unmounts or status changes
+      return () => clearTimeout(timer);
+    }
+  }, [submitStatus]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
@@ -23,13 +49,17 @@ const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // In a real app, you would send this data to your backend
-      // For now, we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Send form data to the backend API using our API utility
+      const response = await api.post('/contacts', formData);
       
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', phone: '', message: '' });
+      if (response.status === 201) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', phone: '', message: '', subject: 'General Inquiry' });
+      } else {
+        throw new Error('Failed to submit form');
+      }
     } catch (error) {
+      console.error('Error submitting form:', error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -45,25 +75,31 @@ const ContactForm = () => {
     >
       <h2 className="text-2xl font-semibold text-primary mb-6">Send Us a Message</h2>
       
-      {submitStatus === 'success' && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg"
-        >
-          Thank you for your message! We'll get back to you shortly.
-        </motion.div>
-      )}
-      
-      {submitStatus === 'error' && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg"
-        >
-          There was an error sending your message. Please try again.
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {submitStatus === 'success' && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg"
+          >
+            Thank you for your message! We'll get back to you shortly.
+          </motion.div>
+        )}
+        
+        {submitStatus === 'error' && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg"
+          >
+            There was an error sending your message. Please try again.
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -102,6 +138,25 @@ const ContactForm = () => {
             onChange={handleChange}
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
+        </div>
+        
+        <div className="mb-4">
+          <label htmlFor="subject" className="block text-gray-700 mb-2">Subject</label>
+          <select
+            id="subject"
+            name="subject"
+            value={formData.subject}
+            onChange={handleChange}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            required
+          >
+            <option value="General Inquiry">General Inquiry</option>
+            <option value="Service Information">Service Information</option>
+            <option value="Pricing & Packages">Pricing & Packages</option>
+            <option value="Testimonial">Submit a Testimonial</option>
+            <option value="Employment">Employment Opportunities</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
         
         <div className="mb-6">

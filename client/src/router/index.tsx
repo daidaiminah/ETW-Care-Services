@@ -10,6 +10,7 @@ import Testimonials from '../pages/Testimonials';
 import FAQ from '../pages/FAQ';
 import Pricing from '../pages/Pricing';
 import Careers from '../pages/Careers';
+import CareerApplication from '../pages/careers/Apply';
 
 // Service Pages
 import SeniorCare from '../pages/services/SeniorCare';
@@ -44,6 +45,7 @@ export default function AppRouter() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/careers" element={<Careers />} />
+        <Route path="/careers/apply" element={<CareerApplication />} />
         
         {/* Service Specific Routes */}
         <Route path="/services/senior-care" element={<SeniorCare />} />
