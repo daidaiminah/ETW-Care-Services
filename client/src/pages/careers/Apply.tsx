@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { useState, FormEvent } from 'react';
+import { useState, useEffect } from 'react';
+import type { FormEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../../utils/api';
 
@@ -21,7 +22,7 @@ const CareerApplication = () => {
   });
   
   // Get position from URL if available
-  useState(() => {
+  useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const positionParam = searchParams.get('position');
     
