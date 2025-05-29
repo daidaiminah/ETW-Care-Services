@@ -2,7 +2,8 @@ import axios from 'axios';
 
 // Create an axios instance with default configs
 const api = axios.create({
-  baseURL: 'http://localhost:3400/api',
+ // baseURL: 'http://localhost:3400/api',
+  baseURL: 'https://etw-care-backend.onrender.com/api',
   headers: {
     'Content-Type': 'application/json',
   }
