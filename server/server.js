@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Configure CORS to accept requests from the React client
 app.use(cors({
-  origin: ['https://etw-care-services.onrender.com/'], // Allow client ports
+  origin: ['https://etw-care-services.onrender.com'], // Allow client ports
   //origin: ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3700'], // Allow client ports
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
