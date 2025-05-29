@@ -21,11 +21,11 @@ export default {
     port: process.env.DB_PORT
   },
   production: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
+    username: process.env.PDB_USER,
+    password: process.env.PDB_PASSWORD,
+    database: process.env.PDB_NAME,
+    host: process.env.PDB_HOST,
     dialect: "postgres",
-    port: process.env.DB_PORT
+    port: process.env.PDB_PORT
   }
 }

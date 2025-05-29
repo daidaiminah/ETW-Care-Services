@@ -4,14 +4,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
+  process.env.PDB_NAME,
+  process.env.PDB_USER,
+  process.env.PDB_PASSWORD,
   {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    host: process.env.PDB_HOST,
+    port: process.env.PDB_PORT,
     dialect: 'postgres',
-    logging: process.env.NODE_ENV === 'development' ? console.log : false,
+    logging: process.env.NODE_ENV === 'production' ? console.log : false,
     pool: {
       max: 5,
       min: 0,
